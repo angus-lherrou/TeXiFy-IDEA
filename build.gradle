@@ -2,7 +2,7 @@
 // Supersedes the use of 'buildscript' block and 'apply plugin:'
 plugins {
     id 'org.jetbrains.intellij' version '0.4.21'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
 
     // Plugin which can check for Gradle dependencies, use the help/dependencyUpdates task.
     id 'com.github.ben-manes.versions' version '0.29.0'
@@ -74,7 +74,7 @@ dependencies {
     compile files("lib/JavaDDEx64.dll")
 
     // From Kotlin documentation
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:1.4.0"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:1.4.10"
 
     // D-Bus Java bindings
     compile "com.github.hypfvieh:dbus-java:3.2.3"
@@ -94,9 +94,9 @@ dependencies {
     testCompile("org.junit.platform:junit-platform-runner:1.7.0-RC1")
 
     // just in case
-    testCompile "org.jetbrains.kotlin:kotlin-test:1.4.0"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit:1.4.0"
-    implementation "org.jetbrains.kotlin:kotlin-script-runtime:1.4.0"
+    testCompile "org.jetbrains.kotlin:kotlin-test:1.4.10"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:1.4.10"
+    implementation "org.jetbrains.kotlin:kotlin-script-runtime:1.4.10"
 
     // Add custom ruleset from github.com/slideclimb/ktlint-ruleset
     ktlintRuleset(files("lib/ktlint-ruleset-0.1.jar"))
