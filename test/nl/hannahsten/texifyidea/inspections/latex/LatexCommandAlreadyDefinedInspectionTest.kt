@@ -8,6 +8,18 @@ class LatexCommandAlreadyDefinedInspectionTest : TexifyInspectionTestBase(LatexC
         myFixture.configureByText(LatexFileType, """
             <error descr="Command is already defined">\newcommand{\cite}{\citeauthor}</error>
             
+            <warning descr="Command is already defined">\def</warning>\huge\large
+            
+            \newcommand{\notexists}{}
+        """.trimIndent())
+        myFixture.checkHighlighting()
+    }
+
+    fun testNoWarningIfImported() {
+        myFixture.configureByText(LatexFileType, """
+            \usepackage{natbib}
+            <error descr="Command is already defined">\newcommand{\cite}{\citeauthor}</error>
+            
             <warning descr="Command is already defined">\def</warning>\citeauthor\cite
             
             \newcommand{\notexists}{}
