@@ -7,6 +7,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import nl.hannahsten.texifyidea.lang.LatexMathCommand
 import nl.hannahsten.texifyidea.lang.LatexRegularCommand
 import nl.hannahsten.texifyidea.lang.RequiredArgument
+import nl.hannahsten.texifyidea.lang.LatexCommand
 import nl.hannahsten.texifyidea.psi.*
 import nl.hannahsten.texifyidea.reference.InputFileReference
 import nl.hannahsten.texifyidea.util.files.document
@@ -129,6 +130,33 @@ fun LatexCommands.getRequiredArgumentValueByName(argument: String): String? {
 fun LatexCommands.isKnown(): Boolean {
     val name = name?.substring(1) ?: ""
     return LatexRegularCommand[name] != null || LatexMathCommand[name] != null
+}
+
+/**
+ * Checks whether a nullable [Collection] of [LatexCommand] contains an included or default dependency.
+ *
+ * @param includedPackages The collection of package names that are considered included.
+ */
+fun Collection<LatexCommand>?.hasIncludedDependency(includedPackages: Collection<String>): Boolean {
+    return this?.any { it.dependency.isDefault || it.dependency.name in includedPackages } == true
+}
+
+/**
+ * Checks whether the command is known by TeXiFy within a file.
+ *
+ * This finds matches in [LatexRegularCommand] and [LatexMathCommand] and then
+ * checks if the dependency of any of those matches is a default dependency or
+ * is found in [PackageUtils.getIncludedPackages].
+ *
+ * @param file The PsiFile to extract included packages from.
+ * @return Whether the command is known (`true`), or unknown (`false`).
+ */
+fun LatexCommands.isKnown(file: PsiFile): Boolean {
+    val includedPackages = PackageUtils.getIncludedPackages(file)
+    val name = name?.substring(1) ?: ""
+    val regularCommandHasDependency = LatexRegularCommand[name].hasIncludedDependency(includedPackages)
+    val mathCommandHasDependency = LatexMathCommand[name].hasIncludedDependency(includedPackages)
+    return regularCommandHasDependency || mathCommandHasDependency
 }
 
 /**
