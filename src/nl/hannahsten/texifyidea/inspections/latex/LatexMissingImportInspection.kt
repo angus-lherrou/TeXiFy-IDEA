@@ -112,6 +112,17 @@ open class LatexMissingImportInspection : TexifyInspectionBase() {
             // So we don't know which of the dependencies the user needs: we assume that if at least one of them is present it will be the right one.
             val dependencies = latexCommands.map { it.dependency }.toSet()
 
+            // If the command is being defined (e.g. by \newcommand),
+            // we don't care that its dependencies aren't included.
+            if (command.previousCommand().isCommandDefinition() &&
+                    command.previousCommand()?.forcedFirstRequiredParameterAsCommand()?.equals(command) == true) {
+                continue
+            }
+
+            // TODO (angus-lherrou @ 2020-09-19): stop checking this command once
+            //  it's been (re)defined (this would be trivial if the commands in
+            //  [PsiFile.commandsInFile] were ordered by position but they're not)
+
             if (dependencies.isEmpty() || dependencies.any { it.isDefault }) {
                 continue
             }
