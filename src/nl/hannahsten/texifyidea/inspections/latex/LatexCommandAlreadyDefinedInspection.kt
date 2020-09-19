@@ -45,7 +45,7 @@ class LatexCommandAlreadyDefinedInspection : TexifyInspectionBase() {
             if ("\\newcommand" == command.name) {
                 val newCommand = command.forcedFirstRequiredParameterAsCommand() ?: continue
 
-                if (newCommand.isKnown()) {
+                if (newCommand.isKnown(file)) {
                     descriptors.add(manager.createProblemDescriptor(
                             command,
                             "Command is already defined",
@@ -59,7 +59,7 @@ class LatexCommandAlreadyDefinedInspection : TexifyInspectionBase() {
             else if ("\\def" == command.name || "\\let" == command.name) {
                 val newCommand = command.forcedFirstRequiredParameterAsCommand() ?: continue
 
-                if (newCommand.isKnown()) {
+                if (newCommand.isKnown(file)) {
                     descriptors.add(manager.createProblemDescriptor(
                             command,
                             "Command is already defined",
